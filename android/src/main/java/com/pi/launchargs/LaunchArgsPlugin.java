@@ -38,10 +38,9 @@ public class LaunchArgsPlugin implements ActivityAware, FlutterPlugin, MethodCal
   @Override
   public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
     Bundle bundle = binding.getActivity().getIntent().getExtras();
+    args.clear();
     if(bundle != null){
       Set<String> keys = bundle.keySet();
-
-      args.clear();
       for (String key : keys) {
         args.add("--" + key);
         args.add(String.valueOf(bundle.get(key)));
@@ -51,17 +50,18 @@ public class LaunchArgsPlugin implements ActivityAware, FlutterPlugin, MethodCal
 
   @Override
   public void onDetachedFromActivityForConfigChanges() {
-  args.clear();
+    args.clear();
   }
 
   public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
     Bundle bundle = binding.getActivity().getIntent().getExtras();
-    Set<String> keys = bundle.keySet();
-
     args.clear();
-    for (String key : keys) {
-      args.add("--" + key);
-      args.add(String.valueOf(bundle.get(key)));
+    if(bundle != null){
+      Set<String> keys = bundle.keySet();
+      for (String key : keys) {
+        args.add("--" + key);
+        args.add(String.valueOf(bundle.get(key)));
+      }
     }
   }
 
